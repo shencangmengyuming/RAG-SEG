@@ -1,0 +1,51 @@
+# Python/cache files
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local environments
+.env
+.env.*
+.venv/
+venv/
+env/
+
+# Datasets and local experiment outputs
+COD10K-v3/
+COD10K-v3.zip
+datasets/
+data/
+outputs/
+runs/
+results/
+checkpoints/
+weights/
+pretrained/
+dinov2/checkpoints/
+sam2/checkpoints/
+dinov2/docs/
+dinov2/notebooks/
+sam2/assets/
+sam2/demo/
+sam2/notebooks/
+sam2/sav_dataset/
+
+# Large model/checkpoint artifacts
+*.ckpt
+*.pth
+*.pt
+*.safetensors
+*.onnx
+*.bin
+*.index
+
+# Local papers/notes
+*.pdf
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
