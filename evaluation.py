@@ -41,6 +41,8 @@ def parse_args():
     parser.add_argument("--neg_thr", type=float, default=0.05)
     parser.add_argument("--mask_thr", type=float, default=0.3)
     parser.add_argument("--n_points", type=int, default=10)
+    parser.add_argument("--index_path", type=str, default="sod_cod.index")
+    parser.add_argument("--score_path", type=str, default="sod_cod_score.index.npz")
     parser.add_argument("--eval_only", action="store_true")
     parser.add_argument("--force", action="store_true", help="Regenerate predictions even if files exist.")
     return parser.parse_args()
@@ -71,9 +73,15 @@ def preprocess_dinov2_image(img: Image.Image, image_size: int, device: torch.dev
     return tensor.to(device)
 
 
-def load_index(repo_root: Path):
-    index = faiss.read_index(str(repo_root / "sod_cod.index"))
-    scores = np.load(repo_root / "sod_cod_score.index.npz")["scores"].astype("float32")
+def load_index(repo_root: Path, index_path: str, score_path: str):
+    index_path = Path(index_path).expanduser()
+    score_path = Path(score_path).expanduser()
+    if not index_path.is_absolute():
+        index_path = repo_root / index_path
+    if not score_path.is_absolute():
+        score_path = repo_root / score_path
+    index = faiss.read_index(str(index_path))
+    scores = np.load(score_path)["scores"].astype("float32")
     return index, scores
 
 
@@ -169,6 +177,14 @@ def resolve_dir(base: Path, maybe_relative: str):
 
 
 def read_split_names(split_path: Path, gt_ext: str):
+    if split_path.suffix.lower() == ".json":
+        data = json.loads(split_path.read_text(encoding="utf-8"))
+        if isinstance(data, dict) and "images" in data:
+            return [Path(item["file_name"]).with_suffix(gt_ext).stem for item in data["images"]]
+        if isinstance(data, list):
+            return [Path(item.get("file_name", item)).with_suffix(gt_ext).stem for item in data]
+        raise ValueError(f"Unsupported JSON split format: {split_path}")
+
     names = []
     for line in split_path.read_text(encoding="utf-8").splitlines():
         if not line.strip():
@@ -178,11 +194,16 @@ def read_split_names(split_path: Path, gt_ext: str):
 
 
 def collect_names(image_dir: Path, gt_dir: Path, image_ext: str, gt_ext: str, split: str):
-    if split:
-        return read_split_names(Path(split).expanduser(), gt_ext), [], []
-
     image_stems = {p.stem for p in image_dir.iterdir() if p.suffix.lower() == image_ext.lower()}
     gt_stems = {p.stem for p in gt_dir.iterdir() if p.suffix.lower() == gt_ext.lower()}
+
+    if split:
+        split_names = read_split_names(Path(split).expanduser(), gt_ext)
+        names = [name for name in split_names if name in image_stems and name in gt_stems]
+        images_without_gt = sorted(name for name in split_names if name in image_stems and name not in gt_stems)
+        gt_without_images = sorted(name for name in split_names if name in gt_stems and name not in image_stems)
+        return names, images_without_gt, gt_without_images
+
     names = sorted(image_stems & gt_stems, key=lambda x: int(x) if x.isdigit() else x)
     return names, sorted(image_stems - gt_stems), sorted(gt_stems - image_stems)
 
@@ -266,7 +287,7 @@ def main():
         log("Loading SAM2...")
         predictor = load_sam2_predictor(repo_root, device)
         log("Loading FAISS index...")
-        index, scores = load_index(repo_root)
+        index, scores = load_index(repo_root, args.index_path, args.score_path)
         log(f"FAISS index loaded: {index.ntotal} vectors, {scores.shape[0]} scores")
         log("Start inference...")
 
