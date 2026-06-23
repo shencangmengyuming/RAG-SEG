@@ -16,6 +16,8 @@ env/
 # Datasets and local experiment outputs
 COD10K-v3/
 COD10K-v3.zip
+CAMO-V.1.0-CVIU2019/
+CAMO-V.1.0.zip
 datasets/
 data/
 outputs/
