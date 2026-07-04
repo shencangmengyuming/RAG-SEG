@@ -27,6 +27,19 @@ def parse_args():
     parser.add_argument("--image_size", type=int, default=256)
     parser.add_argument("--k", type=int, default=4096)
     parser.add_argument("--niter", type=int, default=200)
+    parser.add_argument("--nredo", type=int, default=1)
+    parser.add_argument("--min_points_per_centroid", type=int, default=1)
+    parser.add_argument(
+        "--max_points_per_centroid",
+        type=int,
+        default=0,
+        help="FAISS KMeans training cap per centroid. 0 keeps the FAISS default.",
+    )
+    parser.add_argument(
+        "--spherical_kmeans",
+        action="store_true",
+        help="Use spherical KMeans for L2-normalized feature spaces.",
+    )
     parser.add_argument("--batch_size", type=int, default=16)
     parser.add_argument("--gpu_id", type=int, default=0)
     parser.add_argument("--cpu_faiss", action="store_true")
@@ -203,10 +216,15 @@ def train_kmeans(args, features, use_gpu: bool):
         d=features.shape[1],
         k=args.k,
         niter=args.niter,
+        nredo=args.nredo,
         verbose=True,
         gpu=use_gpu,
         seed=args.seed,
+        min_points_per_centroid=args.min_points_per_centroid,
+        spherical=args.spherical_kmeans,
     )
+    if args.max_points_per_centroid > 0:
+        kmeans.cp.max_points_per_centroid = args.max_points_per_centroid
     kmeans.train(features)
     return kmeans.centroids.astype("float32")
 
@@ -308,6 +326,11 @@ def main():
         fusion=np.array([args.fusion]),
         layers=np.array([args.layers]),
         l2_normalize=np.array([int(args.l2_normalize_features)], dtype=np.int64),
+        niter=np.array([args.niter], dtype=np.int64),
+        nredo=np.array([args.nredo], dtype=np.int64),
+        min_points_per_centroid=np.array([args.min_points_per_centroid], dtype=np.int64),
+        max_points_per_centroid=np.array([args.max_points_per_centroid], dtype=np.int64),
+        spherical_kmeans=np.array([int(args.spherical_kmeans)], dtype=np.int64),
         metadata=json.dumps(extractor.signature()),
     )
     log(f"Saved index: {output_index}")

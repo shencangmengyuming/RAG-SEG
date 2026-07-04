@@ -10,6 +10,18 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Merge DINOv3 RAG-SEG FAISS indexes and score files.")
     parser.add_argument("--index_paths", nargs="+", required=True)
     parser.add_argument("--score_paths", nargs="+", required=True)
+    parser.add_argument(
+        "--component_limits",
+        nargs="*",
+        type=int,
+        default=None,
+        help="Optional per-component vector limits. Use 0 or a negative value to keep all vectors.",
+    )
+    parser.add_argument(
+        "--l2_normalize",
+        action="store_true",
+        help="L2-normalize each component before adding to the merged IndexFlatIP.",
+    )
     parser.add_argument("--output_index", required=True)
     parser.add_argument("--output_scores", required=True)
     return parser.parse_args()
@@ -21,10 +33,24 @@ def reconstruct_all(index):
     return vectors
 
 
+def apply_limit(arr: np.ndarray, limit: int | None):
+    if limit is None or limit <= 0 or limit >= arr.shape[0]:
+        return arr
+    return arr[:limit]
+
+
+def l2_normalize_rows(arr: np.ndarray):
+    norms = np.linalg.norm(arr, axis=1, keepdims=True)
+    return arr / np.clip(norms, 1e-6, None)
+
+
 def main():
     args = parse_args()
     if len(args.index_paths) != len(args.score_paths):
         raise ValueError("--index_paths and --score_paths must have the same length")
+    if args.component_limits is not None and len(args.component_limits) not in {0, len(args.index_paths)}:
+        raise ValueError("--component_limits must be omitted or have one value per input index")
+    limits = args.component_limits or [None] * len(args.index_paths)
 
     vectors = []
     scores = []
@@ -43,18 +69,30 @@ def main():
             raise ValueError(
                 f"Score length mismatch for {score_path}: {score_arr.shape[0]} vs {index.ntotal}"
             )
-        vectors.append(reconstruct_all(index))
-        scores.append(score_arr)
-        if "counts" in score_data.files:
-            counts.append(score_data["counts"].astype(np.int64))
-        else:
-            counts.append(np.zeros(index.ntotal, dtype=np.int64))
+        vector_arr = reconstruct_all(index)
+        count_arr = (
+            score_data["counts"].astype(np.int64)
+            if "counts" in score_data.files
+            else np.zeros(index.ntotal, dtype=np.int64)
+        )
+        limit = limits[len(metadata)]
+        vector_arr = apply_limit(vector_arr, limit)
+        score_arr = apply_limit(score_arr, limit)
+        count_arr = apply_limit(count_arr, limit)
+        if args.l2_normalize:
+            vector_arr = l2_normalize_rows(vector_arr)
+        vectors.append(vector_arr.astype("float32"))
+        scores.append(score_arr.astype("float32"))
+        counts.append(count_arr.astype(np.int64))
         metadata.append(
             {
                 "index_path": str(index_path),
                 "score_path": str(score_path),
                 "ntotal": int(index.ntotal),
+                "kept": int(vector_arr.shape[0]),
+                "limit": None if limit is None else int(limit),
                 "dim": int(index.d),
+                "l2_normalized_on_merge": bool(args.l2_normalize),
                 "keys": list(score_data.files),
                 "metadata": str(score_data["metadata"].tolist()) if "metadata" in score_data.files else "",
             }
@@ -85,4 +123,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

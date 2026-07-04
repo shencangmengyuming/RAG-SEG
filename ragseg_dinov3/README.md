@@ -63,6 +63,39 @@ python -m ragseg_dinov3.build_index_dinov3 \
 
 Use the same `--layers` and `--fusion` values during evaluation.
 
+## FAISS construction controls
+
+`build_index_dinov3.py` exposes FAISS KMeans controls for large-K experiments:
+
+- `--nredo`
+- `--min_points_per_centroid`
+- `--max_points_per_centroid`
+- `--spherical_kmeans`
+
+`merge_indexes.py` can build controlled multi-source indexes without re-extracting features:
+
+```bash
+python -m ragseg_dinov3.merge_indexes \
+  --index_paths indexes/dinov3/sod_cod_dinov3_vits16_k65536.index indexes/dinov3/sod_duts_dinov3_vits16_k65536.index \
+  --score_paths indexes/dinov3/sod_cod_score_dinov3_vits16_k65536.index.npz indexes/dinov3/sod_duts_score_dinov3_vits16_k65536.index.npz \
+  --component_limits 65536 65536 \
+  --l2_normalize \
+  --output_index indexes/dinov3/sod_cod_duts_balanced_65536_65536_l2.index \
+  --output_scores indexes/dinov3/sod_cod_duts_balanced_65536_65536_l2.index.npz
+```
+
+CHAMELEON source-balance check with the current strongest evaluation config:
+
+| Index | S_alpha | meanE | F_w_beta | MAE |
+| --- | ---: | ---: | ---: | ---: |
+| COD 65536 | 0.8838 | 0.9448 | 0.8520 | 0.02517 |
+| COD 65536 + DUTS 16384 | 0.8833 | 0.9465 | 0.8515 | 0.02528 |
+| COD 65536 + DUTS 32768 | 0.8833 | 0.9466 | 0.8515 | 0.02516 |
+| COD 65536 + DUTS 65536 | 0.8847 | 0.9448 | 0.8530 | 0.02509 |
+
+The balanced COD/DUTS index is slightly positive on CHAMELEON but does not close the
+remaining DINOv2 MAE gap by itself.
+
 ## Current strongest local configuration
 
 The strongest local DINOv3 run currently uses:
