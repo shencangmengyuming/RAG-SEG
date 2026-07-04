@@ -18,6 +18,8 @@ COD10K-v3/
 COD10K-v3.zip
 CAMO-V.1.0-CVIU2019/
 CAMO-V.1.0.zip
+CHAMELEON_TestingDataset/
+CHAMELEON_TestingDataset.zip
 datasets/
 data/
 outputs/
@@ -26,6 +28,8 @@ results/
 checkpoints/
 weights/
 pretrained/
+indexes/
+dinov3/
 dinov2/checkpoints/
 sam2/checkpoints/
 dinov2/docs/
@@ -43,6 +47,7 @@ sam2/sav_dataset/
 *.onnx
 *.bin
 *.index
+*.npz
 
 # Local papers/notes
 *.pdf

@@ -1,0 +1,1577 @@
+{
+  "dataset": "CHAMELEON",
+  "num_images": 76,
+  "images_without_gt": [],
+  "gt_without_images": [],
+  "index_path": "indexes/dinov3/sod_cod_duts_dinov3_vits16_4096_65536.index",
+  "score_path": "indexes/dinov3/sod_cod_duts_score_dinov3_vits16_4096_65536.index.npz",
+  "index_ntotal": 69632,
+  "index_dim": 384,
+  "component_boundaries": [
+    0,
+    4096,
+    69632
+  ],
+  "component_counts": [
+    153030,
+    85306
+  ],
+  "component_ratios": [
+    0.6420767320085929,
+    0.3579232679914071
+  ],
+  "score": {
+    "mean": 0.13625413179397583,
+    "std": 0.2707657814025879,
+    "min": 0.0,
+    "max": 1.0,
+    "p10": 0.0,
+    "p50": 0.025864286348223686,
+    "p90": 0.7102625966072083
+  },
+  "distance": {
+    "mean": 45.36714553833008,
+    "std": 5.85842227935791,
+    "min": 28.086503982543945,
+    "max": 65.62555694580078,
+    "p10": 37.764556884765625,
+    "p50": 45.08326721191406,
+    "p90": 53.2451057434082
+  },
+  "prior": {
+    "mae_mean": 0.09414776083768199,
+    "iou_030_mean": 0.6675157761853289
+  },
+  "extractor": {
+    "model_name": "dinov3_vits16",
+    "weights": "/home/lsx/workplace/dino-sod/RAG-SEG-main/dinov3/web_pth/dinov3_vits16_pretrain_lvd1689m-08c60483.pth",
+    "patch_size": 16,
+    "feature_dim": 384,
+    "layers": [],
+    "fusion": "last",
+    "layer_weights": [],
+    "l2_normalize": false
+  },
+  "per_image": [
+    {
+      "name": "animal-1",
+      "tokens": 3136,
+      "score_mean": 0.0701451301574707,
+      "score_std": 0.22177739441394806,
+      "score_min": 0.0,
+      "score_max": 0.996891438961029,
+      "distance_mean": 47.59075927734375,
+      "distance_std": 6.6888861656188965,
+      "prior_mae": 0.03735102713108063,
+      "prior_iou_030": 0.7269650184407581,
+      "component_counts": [
+        327,
+        2809
+      ],
+      "component_ratios": [
+        0.10427295918367346,
+        0.8957270408163265
+      ]
+    },
+    {
+      "name": "animal-10",
+      "tokens": 3136,
+      "score_mean": 0.02489599399268627,
+      "score_std": 0.10009311884641647,
+      "score_min": 0.0,
+      "score_max": 0.9670211672782898,
+      "distance_mean": 38.217350006103516,
+      "distance_std": 3.4419403076171875,
+      "prior_mae": 0.019431548193097115,
+      "prior_iou_030": 0.7201487751699371,
+      "component_counts": [
+        997,
+        2139
+      ],
+      "component_ratios": [
+        0.3179209183673469,
+        0.6820790816326531
+      ]
+    },
+    {
+      "name": "animal-11",
+      "tokens": 3136,
+      "score_mean": 0.09329469501972198,
+      "score_std": 0.235664963722229,
+      "score_min": 0.0,
+      "score_max": 0.9626498818397522,
+      "distance_mean": 47.16798782348633,
+      "distance_std": 5.493015289306641,
+      "prior_mae": 0.041458360850811005,
+      "prior_iou_030": 0.8677225424406845,
+      "component_counts": [
+        755,
+        2381
+      ],
+      "component_ratios": [
+        0.24075255102040816,
+        0.7592474489795918
+      ]
+    },
+    {
+      "name": "animal-12",
+      "tokens": 3136,
+      "score_mean": 0.07657844573259354,
+      "score_std": 0.21840627491474152,
+      "score_min": 0.0,
+      "score_max": 0.9027138352394104,
+      "distance_mean": 49.079750061035156,
+      "distance_std": 6.835024833679199,
+      "prior_mae": 0.03682534024119377,
+      "prior_iou_030": 0.7938113231511764,
+      "component_counts": [
+        2659,
+        477
+      ],
+      "component_ratios": [
+        0.8478954081632653,
+        0.1521045918367347
+      ]
+    },
+    {
+      "name": "animal-13",
+      "tokens": 3136,
+      "score_mean": 0.15768463909626007,
+      "score_std": 0.29584744572639465,
+      "score_min": 0.0,
+      "score_max": 0.9433006048202515,
+      "distance_mean": 41.633575439453125,
+      "distance_std": 4.012539386749268,
+      "prior_mae": 0.060961104929447174,
+      "prior_iou_030": 0.8924922427412433,
+      "component_counts": [
+        2579,
+        557
+      ],
+      "component_ratios": [
+        0.8223852040816326,
+        0.17761479591836735
+      ]
+    },
+    {
+      "name": "animal-14",
+      "tokens": 3136,
+      "score_mean": 0.23067088425159454,
+      "score_std": 0.34762319922447205,
+      "score_min": 0.03183877840638161,
+      "score_max": 0.9929850697517395,
+      "distance_mean": 53.03825378417969,
+      "distance_std": 3.6640777587890625,
+      "prior_mae": 0.05839531496167183,
+      "prior_iou_030": 0.8745112856589359,
+      "component_counts": [
+        2870,
+        266
+      ],
+      "component_ratios": [
+        0.9151785714285714,
+        0.08482142857142858
+      ]
+    },
+    {
+      "name": "animal-15",
+      "tokens": 3136,
+      "score_mean": 0.1244526281952858,
+      "score_std": 0.2751876413822174,
+      "score_min": 0.0,
+      "score_max": 0.9761830568313599,
+      "distance_mean": 50.56255340576172,
+      "distance_std": 6.576772212982178,
+      "prior_mae": 0.06987122446298599,
+      "prior_iou_030": 0.6555730188751846,
+      "component_counts": [
+        1371,
+        1765
+      ],
+      "component_ratios": [
+        0.4371811224489796,
+        0.5628188775510204
+      ]
+    },
+    {
+      "name": "animal-16",
+      "tokens": 3136,
+      "score_mean": 0.15683585405349731,
+      "score_std": 0.16800172626972198,
+      "score_min": 0.006616533733904362,
+      "score_max": 0.8735183477401733,
+      "distance_mean": 44.1283073425293,
+      "distance_std": 3.6862409114837646,
+      "prior_mae": 0.1344810575246811,
+      "prior_iou_030": 0.7851186466052849,
+      "component_counts": [
+        3136,
+        0
+      ],
+      "component_ratios": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "animal-17",
+      "tokens": 3136,
+      "score_mean": 0.2522880733013153,
+      "score_std": 0.3788406252861023,
+      "score_min": 0.0,
+      "score_max": 0.9758137464523315,
+      "distance_mean": 42.592525482177734,
+      "distance_std": 3.976896047592163,
+      "prior_mae": 0.08536234498023987,
+      "prior_iou_030": 0.8714675927622473,
+      "component_counts": [
+        1325,
+        1811
+      ],
+      "component_ratios": [
+        0.42251275510204084,
+        0.5774872448979592
+      ]
+    },
+    {
+      "name": "animal-18",
+      "tokens": 3136,
+      "score_mean": 0.1860678791999817,
+      "score_std": 0.3173287510871887,
+      "score_min": 0.003188015427440405,
+      "score_max": 0.9929850697517395,
+      "distance_mean": 52.80669021606445,
+      "distance_std": 3.421180009841919,
+      "prior_mae": 0.0644853338599205,
+      "prior_iou_030": 0.9091442408507664,
+      "component_counts": [
+        2737,
+        399
+      ],
+      "component_ratios": [
+        0.8727678571428571,
+        0.12723214285714285
+      ]
+    },
+    {
+      "name": "animal-19",
+      "tokens": 3136,
+      "score_mean": 0.10837964713573456,
+      "score_std": 0.24377790093421936,
+      "score_min": 0.0,
+      "score_max": 0.979196310043335,
+      "distance_mean": 49.985107421875,
+      "distance_std": 4.363720893859863,
+      "prior_mae": 0.04778658598661423,
+      "prior_iou_030": 0.9173983739837398,
+      "component_counts": [
+        2450,
+        686
+      ],
+      "component_ratios": [
+        0.78125,
+        0.21875
+      ]
+    },
+    {
+      "name": "animal-2",
+      "tokens": 3136,
+      "score_mean": 0.1185687929391861,
+      "score_std": 0.2796824276447296,
+      "score_min": 0.0,
+      "score_max": 0.9626498818397522,
+      "distance_mean": 42.50795364379883,
+      "distance_std": 5.488413333892822,
+      "prior_mae": 0.041661106050014496,
+      "prior_iou_030": 0.8580283203619276,
+      "component_counts": [
+        891,
+        2245
+      ],
+      "component_ratios": [
+        0.2841198979591837,
+        0.7158801020408163
+      ]
+    },
+    {
+      "name": "animal-20",
+      "tokens": 3136,
+      "score_mean": 0.1180594339966774,
+      "score_std": 0.23631101846694946,
+      "score_min": 0.018673155456781387,
+      "score_max": 0.9110424518585205,
+      "distance_mean": 49.022796630859375,
+      "distance_std": 2.929070234298706,
+      "prior_mae": 0.05118479207158089,
+      "prior_iou_030": 0.7955064172866586,
+      "component_counts": [
+        3136,
+        0
+      ],
+      "component_ratios": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "animal-21",
+      "tokens": 3136,
+      "score_mean": 0.00602596765384078,
+      "score_std": 0.006253112573176622,
+      "score_min": 0.0,
+      "score_max": 0.049791496247053146,
+      "distance_mean": 38.73393249511719,
+      "distance_std": 2.5297515392303467,
+      "prior_mae": 0.12810268998146057,
+      "prior_iou_030": 0.0,
+      "component_counts": [
+        1426,
+        1710
+      ],
+      "component_ratios": [
+        0.45471938775510207,
+        0.545280612244898
+      ]
+    },
+    {
+      "name": "animal-22",
+      "tokens": 3136,
+      "score_mean": 0.08138129860162735,
+      "score_std": 0.20023579895496368,
+      "score_min": 0.0,
+      "score_max": 0.9424178600311279,
+      "distance_mean": 51.45654296875,
+      "distance_std": 5.496764183044434,
+      "prior_mae": 0.0648188591003418,
+      "prior_iou_030": 0.6881080851425415,
+      "component_counts": [
+        3131,
+        5
+      ],
+      "component_ratios": [
+        0.998405612244898,
+        0.0015943877551020409
+      ]
+    },
+    {
+      "name": "animal-23",
+      "tokens": 3136,
+      "score_mean": 0.1356264054775238,
+      "score_std": 0.2894034683704376,
+      "score_min": 0.0,
+      "score_max": 0.9758137464523315,
+      "distance_mean": 41.94495391845703,
+      "distance_std": 3.861414909362793,
+      "prior_mae": 0.05798738822340965,
+      "prior_iou_030": 0.8622447838629604,
+      "component_counts": [
+        867,
+        2269
+      ],
+      "component_ratios": [
+        0.27646683673469385,
+        0.7235331632653061
+      ]
+    },
+    {
+      "name": "animal-24",
+      "tokens": 3136,
+      "score_mean": 0.025683242827653885,
+      "score_std": 0.004128891974687576,
+      "score_min": 0.0,
+      "score_max": 0.06043273210525513,
+      "distance_mean": 41.431602478027344,
+      "distance_std": 2.684976577758789,
+      "prior_mae": 0.425809383392334,
+      "prior_iou_030": 0.01789773309032826,
+      "component_counts": [
+        3016,
+        120
+      ],
+      "component_ratios": [
+        0.9617346938775511,
+        0.03826530612244898
+      ]
+    },
+    {
+      "name": "animal-25",
+      "tokens": 3136,
+      "score_mean": 0.0868670791387558,
+      "score_std": 0.16746093332767487,
+      "score_min": 0.00189208984375,
+      "score_max": 0.9161896705627441,
+      "distance_mean": 42.696170806884766,
+      "distance_std": 4.174253463745117,
+      "prior_mae": 0.08511987328529358,
+      "prior_iou_030": 0.5011392740439813,
+      "component_counts": [
+        2720,
+        416
+      ],
+      "component_ratios": [
+        0.8673469387755102,
+        0.1326530612244898
+      ]
+    },
+    {
+      "name": "animal-26",
+      "tokens": 3136,
+      "score_mean": 0.06766391545534134,
+      "score_std": 0.1510573923587799,
+      "score_min": 0.0,
+      "score_max": 0.9161896705627441,
+      "distance_mean": 48.372169494628906,
+      "distance_std": 3.7662110328674316,
+      "prior_mae": 0.08603180199861526,
+      "prior_iou_030": 0.38841776999671734,
+      "component_counts": [
+        3012,
+        124
+      ],
+      "component_ratios": [
+        0.9604591836734694,
+        0.039540816326530615
+      ]
+    },
+    {
+      "name": "animal-27",
+      "tokens": 3136,
+      "score_mean": 0.13632576167583466,
+      "score_std": 0.2389785349369049,
+      "score_min": 0.0,
+      "score_max": 0.98658287525177,
+      "distance_mean": 48.885562896728516,
+      "distance_std": 4.396068096160889,
+      "prior_mae": 0.09931997209787369,
+      "prior_iou_030": 0.5891070766950722,
+      "component_counts": [
+        2294,
+        842
+      ],
+      "component_ratios": [
+        0.7315051020408163,
+        0.2684948979591837
+      ]
+    },
+    {
+      "name": "animal-28",
+      "tokens": 3136,
+      "score_mean": 0.02735704742372036,
+      "score_std": 0.07964582741260529,
+      "score_min": 0.0,
+      "score_max": 0.954060971736908,
+      "distance_mean": 40.09941864013672,
+      "distance_std": 5.438811779022217,
+      "prior_mae": 0.09799334406852722,
+      "prior_iou_030": 0.10749485303780279,
+      "component_counts": [
+        1881,
+        1255
+      ],
+      "component_ratios": [
+        0.5998086734693877,
+        0.40019132653061223
+      ]
+    },
+    {
+      "name": "animal-29",
+      "tokens": 3136,
+      "score_mean": 0.08595384657382965,
+      "score_std": 0.18035510182380676,
+      "score_min": 0.0,
+      "score_max": 0.9758137464523315,
+      "distance_mean": 46.58505630493164,
+      "distance_std": 3.0693063735961914,
+      "prior_mae": 0.07028137147426605,
+      "prior_iou_030": 0.6835443037974683,
+      "component_counts": [
+        2913,
+        223
+      ],
+      "component_ratios": [
+        0.9288903061224489,
+        0.07110969387755102
+      ]
+    },
+    {
+      "name": "animal-3",
+      "tokens": 3136,
+      "score_mean": 0.01356123760342598,
+      "score_std": 0.016920434311032295,
+      "score_min": 0.0,
+      "score_max": 0.14580754935741425,
+      "distance_mean": 42.8117561340332,
+      "distance_std": 4.490111827850342,
+      "prior_mae": 0.09628742933273315,
+      "prior_iou_030": 0.018241523966714808,
+      "component_counts": [
+        1564,
+        1572
+      ],
+      "component_ratios": [
+        0.4987244897959184,
+        0.5012755102040817
+      ]
+    },
+    {
+      "name": "animal-30",
+      "tokens": 3136,
+      "score_mean": 0.08556360006332397,
+      "score_std": 0.019929984584450722,
+      "score_min": 0.0,
+      "score_max": 0.6779513955116272,
+      "distance_mean": 44.7484245300293,
+      "distance_std": 3.930140733718872,
+      "prior_mae": 0.15734215080738068,
+      "prior_iou_030": 0.041378515444905485,
+      "component_counts": [
+        3110,
+        26
+      ],
+      "component_ratios": [
+        0.9917091836734694,
+        0.008290816326530613
+      ]
+    },
+    {
+      "name": "animal-31",
+      "tokens": 3136,
+      "score_mean": 0.06276227533817291,
+      "score_std": 0.1039682999253273,
+      "score_min": 0.0,
+      "score_max": 0.9627039432525635,
+      "distance_mean": 43.752227783203125,
+      "distance_std": 3.3065590858459473,
+      "prior_mae": 0.07727769762277603,
+      "prior_iou_030": 0.4593196882511472,
+      "component_counts": [
+        2707,
+        429
+      ],
+      "component_ratios": [
+        0.8632015306122449,
+        0.1367984693877551
+      ]
+    },
+    {
+      "name": "animal-32",
+      "tokens": 3136,
+      "score_mean": 0.08115100860595703,
+      "score_std": 0.2214915007352829,
+      "score_min": 0.0,
+      "score_max": 0.9241533279418945,
+      "distance_mean": 40.787376403808594,
+      "distance_std": 4.492778301239014,
+      "prior_mae": 0.038334302604198456,
+      "prior_iou_030": 0.7651510637029975,
+      "component_counts": [
+        661,
+        2475
+      ],
+      "component_ratios": [
+        0.2107780612244898,
+        0.7892219387755102
+      ]
+    },
+    {
+      "name": "animal-33",
+      "tokens": 3136,
+      "score_mean": 0.15077745914459229,
+      "score_std": 0.24447773396968842,
+      "score_min": 0.0,
+      "score_max": 0.9483705163002014,
+      "distance_mean": 38.37135696411133,
+      "distance_std": 3.8404510021209717,
+      "prior_mae": 0.11715365201234818,
+      "prior_iou_030": 0.7073894875742248,
+      "component_counts": [
+        2127,
+        1009
+      ],
+      "component_ratios": [
+        0.6782525510204082,
+        0.32174744897959184
+      ]
+    },
+    {
+      "name": "animal-34",
+      "tokens": 3136,
+      "score_mean": 0.12886251509189606,
+      "score_std": 0.28491640090942383,
+      "score_min": 0.0,
+      "score_max": 1.0,
+      "distance_mean": 39.37668991088867,
+      "distance_std": 3.1652278900146484,
+      "prior_mae": 0.11571909487247467,
+      "prior_iou_030": 0.4961800907636554,
+      "component_counts": [
+        421,
+        2715
+      ],
+      "component_ratios": [
+        0.13424744897959184,
+        0.8657525510204082
+      ]
+    },
+    {
+      "name": "animal-35",
+      "tokens": 3136,
+      "score_mean": 0.031869180500507355,
+      "score_std": 0.04651481285691261,
+      "score_min": 0.0,
+      "score_max": 0.12465567141771317,
+      "distance_mean": 44.423580169677734,
+      "distance_std": 6.160896301269531,
+      "prior_mae": 0.15660066902637482,
+      "prior_iou_030": 0.48697757612773757,
+      "component_counts": [
+        1319,
+        1817
+      ],
+      "component_ratios": [
+        0.4205994897959184,
+        0.5794005102040817
+      ]
+    },
+    {
+      "name": "animal-36",
+      "tokens": 3136,
+      "score_mean": 0.23542264103889465,
+      "score_std": 0.2856697738170624,
+      "score_min": 0.0,
+      "score_max": 0.9593933820724487,
+      "distance_mean": 44.681304931640625,
+      "distance_std": 5.847956657409668,
+      "prior_mae": 0.33278095722198486,
+      "prior_iou_030": 0.6372999165184566,
+      "component_counts": [
+        2361,
+        775
+      ],
+      "component_ratios": [
+        0.7528698979591837,
+        0.2471301020408163
+      ]
+    },
+    {
+      "name": "animal-37",
+      "tokens": 3136,
+      "score_mean": 0.21451404690742493,
+      "score_std": 0.35845014452934265,
+      "score_min": 0.005797697231173515,
+      "score_max": 0.978515625,
+      "distance_mean": 49.30126953125,
+      "distance_std": 4.756777286529541,
+      "prior_mae": 0.050380345433950424,
+      "prior_iou_030": 0.948094091282805,
+      "component_counts": [
+        2942,
+        194
+      ],
+      "component_ratios": [
+        0.9381377551020408,
+        0.06186224489795918
+      ]
+    },
+    {
+      "name": "animal-38",
+      "tokens": 3136,
+      "score_mean": 0.1463567465543747,
+      "score_std": 0.3145076036453247,
+      "score_min": 0.0,
+      "score_max": 0.8801310658454895,
+      "distance_mean": 48.32275390625,
+      "distance_std": 3.6589176654815674,
+      "prior_mae": 0.026698943227529526,
+      "prior_iou_030": 0.8952560308492512,
+      "component_counts": [
+        1440,
+        1696
+      ],
+      "component_ratios": [
+        0.45918367346938777,
+        0.5408163265306123
+      ]
+    },
+    {
+      "name": "animal-39",
+      "tokens": 3136,
+      "score_mean": 0.10257524251937866,
+      "score_std": 0.24747633934020996,
+      "score_min": 0.0,
+      "score_max": 0.978515625,
+      "distance_mean": 47.158111572265625,
+      "distance_std": 4.968112945556641,
+      "prior_mae": 0.05320395529270172,
+      "prior_iou_030": 0.8444030467376771,
+      "component_counts": [
+        2931,
+        205
+      ],
+      "component_ratios": [
+        0.9346301020408163,
+        0.06536989795918367
+      ]
+    },
+    {
+      "name": "animal-4",
+      "tokens": 3136,
+      "score_mean": 0.14618970453739166,
+      "score_std": 0.3037945330142975,
+      "score_min": 0.0,
+      "score_max": 0.985535740852356,
+      "distance_mean": 41.16791534423828,
+      "distance_std": 4.8043437004089355,
+      "prior_mae": 0.060739073902368546,
+      "prior_iou_030": 0.8588059091837429,
+      "component_counts": [
+        1512,
+        1624
+      ],
+      "component_ratios": [
+        0.48214285714285715,
+        0.5178571428571429
+      ]
+    },
+    {
+      "name": "animal-40",
+      "tokens": 3136,
+      "score_mean": 0.2003650665283203,
+      "score_std": 0.19610272347927094,
+      "score_min": 0.0,
+      "score_max": 0.9267578125,
+      "distance_mean": 40.053016662597656,
+      "distance_std": 4.143643379211426,
+      "prior_mae": 0.18896187841892242,
+      "prior_iou_030": 0.705201401740363,
+      "component_counts": [
+        2415,
+        721
+      ],
+      "component_ratios": [
+        0.7700892857142857,
+        0.22991071428571427
+      ]
+    },
+    {
+      "name": "animal-41",
+      "tokens": 3136,
+      "score_mean": 0.1690693497657776,
+      "score_std": 0.25596803426742554,
+      "score_min": 0.0,
+      "score_max": 0.9573516249656677,
+      "distance_mean": 45.8560676574707,
+      "distance_std": 4.057948112487793,
+      "prior_mae": 0.12171338498592377,
+      "prior_iou_030": 0.7193995233908068,
+      "component_counts": [
+        2718,
+        418
+      ],
+      "component_ratios": [
+        0.8667091836734694,
+        0.13329081632653061
+      ]
+    },
+    {
+      "name": "animal-42",
+      "tokens": 3136,
+      "score_mean": 0.073770672082901,
+      "score_std": 0.15741392970085144,
+      "score_min": 0.0,
+      "score_max": 0.42616933584213257,
+      "distance_mean": 39.565338134765625,
+      "distance_std": 4.018906593322754,
+      "prior_mae": 0.11027742177248001,
+      "prior_iou_030": 0.3828656650463986,
+      "component_counts": [
+        2420,
+        716
+      ],
+      "component_ratios": [
+        0.7716836734693877,
+        0.22831632653061223
+      ]
+    },
+    {
+      "name": "animal-43",
+      "tokens": 3136,
+      "score_mean": 0.39181581139564514,
+      "score_std": 0.4448382258415222,
+      "score_min": 0.00189208984375,
+      "score_max": 0.9587898850440979,
+      "distance_mean": 42.15799331665039,
+      "distance_std": 4.2237868309021,
+      "prior_mae": 0.05582062900066376,
+      "prior_iou_030": 0.9374469161682057,
+      "component_counts": [
+        3028,
+        108
+      ],
+      "component_ratios": [
+        0.9655612244897959,
+        0.03443877551020408
+      ]
+    },
+    {
+      "name": "animal-44",
+      "tokens": 3136,
+      "score_mean": 0.19291749596595764,
+      "score_std": 0.34807971119880676,
+      "score_min": 0.01901169866323471,
+      "score_max": 0.9018105864524841,
+      "distance_mean": 48.30803680419922,
+      "distance_std": 3.638803243637085,
+      "prior_mae": 0.018458934500813484,
+      "prior_iou_030": 0.9352512315270936,
+      "component_counts": [
+        2972,
+        164
+      ],
+      "component_ratios": [
+        0.9477040816326531,
+        0.05229591836734694
+      ]
+    },
+    {
+      "name": "animal-45",
+      "tokens": 3136,
+      "score_mean": 0.048134852200746536,
+      "score_std": 0.05693644657731056,
+      "score_min": 0.0,
+      "score_max": 0.9758137464523315,
+      "distance_mean": 41.05076599121094,
+      "distance_std": 3.12111234664917,
+      "prior_mae": 0.1153494268655777,
+      "prior_iou_030": 0.042001735608909456,
+      "component_counts": [
+        1739,
+        1397
+      ],
+      "component_ratios": [
+        0.5545280612244898,
+        0.4454719387755102
+      ]
+    },
+    {
+      "name": "animal-46",
+      "tokens": 3136,
+      "score_mean": 0.08892463892698288,
+      "score_std": 0.23665229976177216,
+      "score_min": 0.0,
+      "score_max": 0.9161896705627441,
+      "distance_mean": 42.84524154663086,
+      "distance_std": 4.740748882293701,
+      "prior_mae": 0.05100174620747566,
+      "prior_iou_030": 0.7067061821204619,
+      "component_counts": [
+        2503,
+        633
+      ],
+      "component_ratios": [
+        0.7981505102040817,
+        0.20184948979591838
+      ]
+    },
+    {
+      "name": "animal-47",
+      "tokens": 3136,
+      "score_mean": 0.23047828674316406,
+      "score_std": 0.36903199553489685,
+      "score_min": 0.0,
+      "score_max": 0.93701171875,
+      "distance_mean": 47.74575424194336,
+      "distance_std": 4.138204097747803,
+      "prior_mae": 0.05711474269628525,
+      "prior_iou_030": 0.9248682711131456,
+      "component_counts": [
+        1617,
+        1519
+      ],
+      "component_ratios": [
+        0.515625,
+        0.484375
+      ]
+    },
+    {
+      "name": "animal-48",
+      "tokens": 3136,
+      "score_mean": 0.1750798523426056,
+      "score_std": 0.32936835289001465,
+      "score_min": 0.0,
+      "score_max": 0.916637659072876,
+      "distance_mean": 44.845977783203125,
+      "distance_std": 3.5699243545532227,
+      "prior_mae": 0.046554602682590485,
+      "prior_iou_030": 0.863112036470565,
+      "component_counts": [
+        2995,
+        141
+      ],
+      "component_ratios": [
+        0.9550382653061225,
+        0.04496173469387755
+      ]
+    },
+    {
+      "name": "animal-49",
+      "tokens": 3136,
+      "score_mean": 0.05012678727507591,
+      "score_std": 0.17919868230819702,
+      "score_min": 0.0,
+      "score_max": 0.9476950764656067,
+      "distance_mean": 46.66108322143555,
+      "distance_std": 5.687196254730225,
+      "prior_mae": 0.024039948359131813,
+      "prior_iou_030": 0.7908523567088191,
+      "component_counts": [
+        9,
+        3127
+      ],
+      "component_ratios": [
+        0.0028698979591836736,
+        0.9971301020408163
+      ]
+    },
+    {
+      "name": "animal-5",
+      "tokens": 3136,
+      "score_mean": 0.0023900391533970833,
+      "score_std": 0.004738883581012487,
+      "score_min": 0.0,
+      "score_max": 0.045909397304058075,
+      "distance_mean": 46.83113479614258,
+      "distance_std": 4.602479934692383,
+      "prior_mae": 0.054172713309526443,
+      "prior_iou_030": 0.0,
+      "component_counts": [
+        356,
+        2780
+      ],
+      "component_ratios": [
+        0.11352040816326531,
+        0.8864795918367347
+      ]
+    },
+    {
+      "name": "animal-50",
+      "tokens": 3136,
+      "score_mean": 0.10036668926477432,
+      "score_std": 0.2427951842546463,
+      "score_min": 0.0,
+      "score_max": 0.8987600207328796,
+      "distance_mean": 47.63246536254883,
+      "distance_std": 3.9624969959259033,
+      "prior_mae": 0.04239242523908615,
+      "prior_iou_030": 0.8493310783868883,
+      "component_counts": [
+        2572,
+        564
+      ],
+      "component_ratios": [
+        0.8201530612244898,
+        0.1798469387755102
+      ]
+    },
+    {
+      "name": "animal-51",
+      "tokens": 3136,
+      "score_mean": 0.2871582508087158,
+      "score_std": 0.4061054289340973,
+      "score_min": 0.02956046722829342,
+      "score_max": 0.9587898850440979,
+      "distance_mean": 51.48368835449219,
+      "distance_std": 5.3779473304748535,
+      "prior_mae": 0.03318573161959648,
+      "prior_iou_030": 0.9363157723682928,
+      "component_counts": [
+        3105,
+        31
+      ],
+      "component_ratios": [
+        0.9901147959183674,
+        0.009885204081632654
+      ]
+    },
+    {
+      "name": "animal-52",
+      "tokens": 3136,
+      "score_mean": 0.09789353609085083,
+      "score_std": 0.19225479662418365,
+      "score_min": 0.0,
+      "score_max": 0.8704517483711243,
+      "distance_mean": 47.725704193115234,
+      "distance_std": 4.337704181671143,
+      "prior_mae": 0.08872148394584656,
+      "prior_iou_030": 0.6942341495675177,
+      "component_counts": [
+        3136,
+        0
+      ],
+      "component_ratios": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "animal-53",
+      "tokens": 3136,
+      "score_mean": 0.057860784232616425,
+      "score_std": 0.1859389692544937,
+      "score_min": 0.0,
+      "score_max": 0.9626498818397522,
+      "distance_mean": 45.23896026611328,
+      "distance_std": 5.407233238220215,
+      "prior_mae": 0.02971840649843216,
+      "prior_iou_030": 0.7953155101902862,
+      "component_counts": [
+        807,
+        2329
+      ],
+      "component_ratios": [
+        0.2573341836734694,
+        0.7426658163265306
+      ]
+    },
+    {
+      "name": "animal-54",
+      "tokens": 3136,
+      "score_mean": 0.03180608153343201,
+      "score_std": 0.09135705232620239,
+      "score_min": 0.0,
+      "score_max": 0.9161896705627441,
+      "distance_mean": 48.43556594848633,
+      "distance_std": 3.156677484512329,
+      "prior_mae": 0.037178680300712585,
+      "prior_iou_030": 0.45695364238410596,
+      "component_counts": [
+        2653,
+        483
+      ],
+      "component_ratios": [
+        0.8459821428571429,
+        0.15401785714285715
+      ]
+    },
+    {
+      "name": "animal-55",
+      "tokens": 3136,
+      "score_mean": 0.2708166837692261,
+      "score_std": 0.33511558175086975,
+      "score_min": 0.0,
+      "score_max": 0.97216796875,
+      "distance_mean": 38.38144302368164,
+      "distance_std": 3.659130573272705,
+      "prior_mae": 0.16205701231956482,
+      "prior_iou_030": 0.7299737509051412,
+      "component_counts": [
+        1168,
+        1968
+      ],
+      "component_ratios": [
+        0.37244897959183676,
+        0.6275510204081632
+      ]
+    },
+    {
+      "name": "animal-56",
+      "tokens": 3136,
+      "score_mean": 0.0712130144238472,
+      "score_std": 0.15935297310352325,
+      "score_min": 0.0,
+      "score_max": 0.9146891236305237,
+      "distance_mean": 44.22146224975586,
+      "distance_std": 4.498061656951904,
+      "prior_mae": 0.12078152596950531,
+      "prior_iou_030": 0.3466594112945738,
+      "component_counts": [
+        789,
+        2347
+      ],
+      "component_ratios": [
+        0.25159438775510207,
+        0.748405612244898
+      ]
+    },
+    {
+      "name": "animal-57",
+      "tokens": 3136,
+      "score_mean": 0.052454181015491486,
+      "score_std": 0.11687161028385162,
+      "score_min": 0.0,
+      "score_max": 0.8497976064682007,
+      "distance_mean": 51.18476486206055,
+      "distance_std": 4.40916633605957,
+      "prior_mae": 0.060012541711330414,
+      "prior_iou_030": 0.3621169065297766,
+      "component_counts": [
+        2868,
+        268
+      ],
+      "component_ratios": [
+        0.9145408163265306,
+        0.08545918367346939
+      ]
+    },
+    {
+      "name": "animal-58",
+      "tokens": 3136,
+      "score_mean": 0.05832042917609215,
+      "score_std": 0.0618794783949852,
+      "score_min": 0.0,
+      "score_max": 0.13833193480968475,
+      "distance_mean": 42.06430435180664,
+      "distance_std": 3.1807992458343506,
+      "prior_mae": 0.32005181908607483,
+      "prior_iou_030": 0.2747946704262998,
+      "component_counts": [
+        2677,
+        459
+      ],
+      "component_ratios": [
+        0.8536352040816326,
+        0.14636479591836735
+      ]
+    },
+    {
+      "name": "animal-59",
+      "tokens": 3136,
+      "score_mean": 0.20019873976707458,
+      "score_std": 0.27212250232696533,
+      "score_min": 0.0,
+      "score_max": 1.0,
+      "distance_mean": 45.16834259033203,
+      "distance_std": 3.0018177032470703,
+      "prior_mae": 0.10440638661384583,
+      "prior_iou_030": 0.9064170509555601,
+      "component_counts": [
+        2374,
+        762
+      ],
+      "component_ratios": [
+        0.7570153061224489,
+        0.24298469387755103
+      ]
+    },
+    {
+      "name": "animal-6",
+      "tokens": 3136,
+      "score_mean": 0.07304581254720688,
+      "score_std": 0.1922776997089386,
+      "score_min": 0.0,
+      "score_max": 0.9929850697517395,
+      "distance_mean": 51.32484817504883,
+      "distance_std": 4.3874192237854,
+      "prior_mae": 0.041572920978069305,
+      "prior_iou_030": 0.6029509341714685,
+      "component_counts": [
+        2734,
+        402
+      ],
+      "component_ratios": [
+        0.8718112244897959,
+        0.12818877551020408
+      ]
+    },
+    {
+      "name": "animal-60",
+      "tokens": 3136,
+      "score_mean": 0.08555600792169571,
+      "score_std": 0.01906518079340458,
+      "score_min": 0.0,
+      "score_max": 0.12465567141771317,
+      "distance_mean": 49.97047424316406,
+      "distance_std": 3.8079607486724854,
+      "prior_mae": 0.6443566679954529,
+      "prior_iou_030": 0.10429178970663716,
+      "component_counts": [
+        2923,
+        213
+      ],
+      "component_ratios": [
+        0.9320790816326531,
+        0.06792091836734694
+      ]
+    },
+    {
+      "name": "animal-61",
+      "tokens": 3136,
+      "score_mean": 0.2168232649564743,
+      "score_std": 0.37096765637397766,
+      "score_min": 0.0,
+      "score_max": 0.9929850697517395,
+      "distance_mean": 47.4913215637207,
+      "distance_std": 4.595239639282227,
+      "prior_mae": 0.04853596165776253,
+      "prior_iou_030": 0.917455239269952,
+      "component_counts": [
+        1936,
+        1200
+      ],
+      "component_ratios": [
+        0.6173469387755102,
+        0.3826530612244898
+      ]
+    },
+    {
+      "name": "animal-62",
+      "tokens": 3136,
+      "score_mean": 0.35976642370224,
+      "score_std": 0.4081335663795471,
+      "score_min": 0.0,
+      "score_max": 0.9758137464523315,
+      "distance_mean": 42.09672927856445,
+      "distance_std": 3.819636583328247,
+      "prior_mae": 0.12293592095375061,
+      "prior_iou_030": 0.8692384977827051,
+      "component_counts": [
+        1185,
+        1951
+      ],
+      "component_ratios": [
+        0.3778698979591837,
+        0.6221301020408163
+      ]
+    },
+    {
+      "name": "animal-63",
+      "tokens": 3136,
+      "score_mean": 0.25695422291755676,
+      "score_std": 0.3046609163284302,
+      "score_min": 0.006616533733904362,
+      "score_max": 0.6543064117431641,
+      "distance_mean": 48.10051727294922,
+      "distance_std": 3.4081289768218994,
+      "prior_mae": 0.15482400357723236,
+      "prior_iou_030": 0.6353011166025994,
+      "component_counts": [
+        3136,
+        0
+      ],
+      "component_ratios": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "animal-64",
+      "tokens": 3136,
+      "score_mean": 0.05000144988298416,
+      "score_std": 0.16596944630146027,
+      "score_min": 0.0,
+      "score_max": 0.7237547039985657,
+      "distance_mean": 41.76874923706055,
+      "distance_std": 3.691387176513672,
+      "prior_mae": 0.04351679980754852,
+      "prior_iou_030": 0.5441835866540964,
+      "component_counts": [
+        643,
+        2493
+      ],
+      "component_ratios": [
+        0.20503826530612246,
+        0.7949617346938775
+      ]
+    },
+    {
+      "name": "animal-65",
+      "tokens": 3136,
+      "score_mean": 0.2921716272830963,
+      "score_std": 0.3188438415527344,
+      "score_min": 0.0,
+      "score_max": 0.975180983543396,
+      "distance_mean": 50.464603424072266,
+      "distance_std": 4.590325832366943,
+      "prior_mae": 0.21688015758991241,
+      "prior_iou_030": 0.5905420328118873,
+      "component_counts": [
+        2539,
+        597
+      ],
+      "component_ratios": [
+        0.8096301020408163,
+        0.1903698979591837
+      ]
+    },
+    {
+      "name": "animal-66",
+      "tokens": 3136,
+      "score_mean": 0.08126941323280334,
+      "score_std": 0.19773530960083008,
+      "score_min": 0.0,
+      "score_max": 0.8598924875259399,
+      "distance_mean": 43.87470245361328,
+      "distance_std": 3.911952257156372,
+      "prior_mae": 0.06120358034968376,
+      "prior_iou_030": 0.6880588118418438,
+      "component_counts": [
+        1060,
+        2076
+      ],
+      "component_ratios": [
+        0.3380102040816326,
+        0.6619897959183674
+      ]
+    },
+    {
+      "name": "animal-67",
+      "tokens": 3136,
+      "score_mean": 0.060682665556669235,
+      "score_std": 0.18137794733047485,
+      "score_min": 0.0,
+      "score_max": 0.8024305701255798,
+      "distance_mean": 44.902278900146484,
+      "distance_std": 4.733766555786133,
+      "prior_mae": 0.032075971364974976,
+      "prior_iou_030": 0.8205255910702253,
+      "component_counts": [
+        89,
+        3047
+      ],
+      "component_ratios": [
+        0.028380102040816327,
+        0.9716198979591837
+      ]
+    },
+    {
+      "name": "animal-68",
+      "tokens": 3136,
+      "score_mean": 0.1371474713087082,
+      "score_std": 0.26933369040489197,
+      "score_min": 0.0,
+      "score_max": 0.9161896705627441,
+      "distance_mean": 47.08400344848633,
+      "distance_std": 5.241048336029053,
+      "prior_mae": 0.06889070570468903,
+      "prior_iou_030": 0.827811016976429,
+      "component_counts": [
+        1944,
+        1192
+      ],
+      "component_ratios": [
+        0.6198979591836735,
+        0.38010204081632654
+      ]
+    },
+    {
+      "name": "animal-69",
+      "tokens": 3136,
+      "score_mean": 0.3546217679977417,
+      "score_std": 0.42070305347442627,
+      "score_min": 0.0,
+      "score_max": 0.9587898850440979,
+      "distance_mean": 43.29507064819336,
+      "distance_std": 5.558537006378174,
+      "prior_mae": 0.06231524795293808,
+      "prior_iou_030": 0.9438729221448232,
+      "component_counts": [
+        1779,
+        1357
+      ],
+      "component_ratios": [
+        0.5672831632653061,
+        0.43271683673469385
+      ]
+    },
+    {
+      "name": "animal-7",
+      "tokens": 3136,
+      "score_mean": 0.24918104708194733,
+      "score_std": 0.37344855070114136,
+      "score_min": 0.0,
+      "score_max": 0.9857140779495239,
+      "distance_mean": 40.547813415527344,
+      "distance_std": 4.44904088973999,
+      "prior_mae": 0.08220227062702179,
+      "prior_iou_030": 0.8456089261174007,
+      "component_counts": [
+        0,
+        3136
+      ],
+      "component_ratios": [
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "name": "animal-70",
+      "tokens": 3136,
+      "score_mean": 0.09472291171550751,
+      "score_std": 0.16092489659786224,
+      "score_min": 0.022309711202979088,
+      "score_max": 0.7192957997322083,
+      "distance_mean": 45.75287628173828,
+      "distance_std": 4.560336589813232,
+      "prior_mae": 0.08425424247980118,
+      "prior_iou_030": 0.6230949998836641,
+      "component_counts": [
+        3136,
+        0
+      ],
+      "component_ratios": [
+        1.0,
+        0.0
+      ]
+    },
+    {
+      "name": "animal-71",
+      "tokens": 3136,
+      "score_mean": 0.2152167558670044,
+      "score_std": 0.3600784242153168,
+      "score_min": 0.0018408764153718948,
+      "score_max": 0.985535740852356,
+      "distance_mean": 46.96930694580078,
+      "distance_std": 3.6632370948791504,
+      "prior_mae": 0.05461916700005531,
+      "prior_iou_030": 0.9225311688050112,
+      "component_counts": [
+        2363,
+        773
+      ],
+      "component_ratios": [
+        0.7535076530612245,
+        0.2464923469387755
+      ]
+    },
+    {
+      "name": "animal-72",
+      "tokens": 3136,
+      "score_mean": 0.12244312465190887,
+      "score_std": 0.19786743819713593,
+      "score_min": 0.0,
+      "score_max": 0.972194254398346,
+      "distance_mean": 42.2972526550293,
+      "distance_std": 4.047662734985352,
+      "prior_mae": 0.09383171796798706,
+      "prior_iou_030": 0.8042838934654624,
+      "component_counts": [
+        2291,
+        845
+      ],
+      "component_ratios": [
+        0.7305484693877551,
+        0.2694515306122449
+      ]
+    },
+    {
+      "name": "animal-73",
+      "tokens": 3136,
+      "score_mean": 0.2742083668708801,
+      "score_std": 0.3756621479988098,
+      "score_min": 0.0,
+      "score_max": 0.916637659072876,
+      "distance_mean": 45.94462585449219,
+      "distance_std": 3.3452415466308594,
+      "prior_mae": 0.07140319049358368,
+      "prior_iou_030": 0.8823880361796375,
+      "component_counts": [
+        2049,
+        1087
+      ],
+      "component_ratios": [
+        0.6533801020408163,
+        0.3466198979591837
+      ]
+    },
+    {
+      "name": "animal-74",
+      "tokens": 3136,
+      "score_mean": 0.15610076487064362,
+      "score_std": 0.30320417881011963,
+      "score_min": 0.002236937405541539,
+      "score_max": 0.9031745791435242,
+      "distance_mean": 47.014930725097656,
+      "distance_std": 4.472257614135742,
+      "prior_mae": 0.04593954235315323,
+      "prior_iou_030": 0.8908384626932893,
+      "component_counts": [
+        2934,
+        202
+      ],
+      "component_ratios": [
+        0.9355867346938775,
+        0.06441326530612244
+      ]
+    },
+    {
+      "name": "animal-75",
+      "tokens": 3136,
+      "score_mean": 0.2822107970714569,
+      "score_std": 0.3857961595058441,
+      "score_min": 0.0,
+      "score_max": 0.9929850697517395,
+      "distance_mean": 51.29241180419922,
+      "distance_std": 4.0326313972473145,
+      "prior_mae": 0.07733827084302902,
+      "prior_iou_030": 0.9138813514232509,
+      "component_counts": [
+        1200,
+        1936
+      ],
+      "component_ratios": [
+        0.3826530612244898,
+        0.6173469387755102
+      ]
+    },
+    {
+      "name": "animal-76",
+      "tokens": 3136,
+      "score_mean": 0.22789311408996582,
+      "score_std": 0.35884782671928406,
+      "score_min": 0.0,
+      "score_max": 0.9626498818397522,
+      "distance_mean": 51.70358657836914,
+      "distance_std": 4.863266468048096,
+      "prior_mae": 0.06027473136782646,
+      "prior_iou_030": 0.9173451382224561,
+      "component_counts": [
+        1543,
+        1593
+      ],
+      "component_ratios": [
+        0.4920280612244898,
+        0.5079719387755102
+      ]
+    },
+    {
+      "name": "animal-8",
+      "tokens": 3136,
+      "score_mean": 0.044676896184682846,
+      "score_std": 0.1104198545217514,
+      "score_min": 0.0,
+      "score_max": 0.890625,
+      "distance_mean": 40.13212585449219,
+      "distance_std": 4.553689479827881,
+      "prior_mae": 0.045271310955286026,
+      "prior_iou_030": 0.5955370547290842,
+      "component_counts": [
+        1828,
+        1308
+      ],
+      "component_ratios": [
+        0.5829081632653061,
+        0.41709183673469385
+      ]
+    },
+    {
+      "name": "animal-9",
+      "tokens": 3136,
+      "score_mean": 0.09904663264751434,
+      "score_std": 0.2340421825647354,
+      "score_min": 0.0,
+      "score_max": 0.9424178600311279,
+      "distance_mean": 44.975894927978516,
+      "distance_std": 4.026501178741455,
+      "prior_mae": 0.05377790331840515,
+      "prior_iou_030": 0.7673025382311209,
+      "component_counts": [
+        1209,
+        1927
+      ],
+      "component_ratios": [
+        0.38552295918367346,
+        0.6144770408163265
+      ]
+    }
+  ]
+}
