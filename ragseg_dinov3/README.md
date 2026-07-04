@@ -73,6 +73,7 @@ The strongest local DINOv3 run currently uses:
 - retrieval top-5 mean
 - `mask_thr=0.27`, `pos_thr=0.95`, `neg_thr=0.05`
 - deterministic `farthest_confidence` point sampling
+- no structural-propagation prior enhancement; the DINOv2 `sp` module was negative in DINOv3 ablations and is intentionally not exposed here
 
 Example COD10K command:
 

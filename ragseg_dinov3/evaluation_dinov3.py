@@ -78,14 +78,11 @@ def parse_args():
         "--prior_mode",
         type=str,
         default="none",
-        choices=["none", "pc", "sp", "pc_sp", "fcpc", "fcpc_sp"],
+        choices=["none", "pc", "fcpc"],
     )
     parser.add_argument("--pc_seed_thr", type=float, default=0.5)
     parser.add_argument("--pc_expand_iter", type=int, default=2)
     parser.add_argument("--pc_close_kernel", type=int, default=5)
-    parser.add_argument("--sp_iters", type=int, default=1)
-    parser.add_argument("--sp_alpha", type=float, default=0.45)
-    parser.add_argument("--sp_anchor", type=float, default=0.65)
     parser.add_argument("--fcpc_seed_thr", type=float, default=0.7)
     parser.add_argument("--fcpc_low_thr", type=float, default=0.2)
     parser.add_argument("--fcpc_sim_thr", type=float, default=0.6)
@@ -203,40 +200,6 @@ def part_composition_prior(prior: np.ndarray, args):
     return np.clip(enhanced, 0.0, 1.0).astype(np.float32)
 
 
-def structural_propagation_prior(prior: np.ndarray, token_grid: np.ndarray, args):
-    if token_grid is None or args.sp_iters <= 0:
-        return prior
-    feats = token_grid.astype(np.float32)
-    feats = feats / np.linalg.norm(feats, axis=-1, keepdims=True).clip(min=1e-6)
-    current = prior.astype(np.float32)
-    anchor = current.copy()
-    h, w = current.shape
-    offsets = [(-1, 0), (1, 0), (0, -1), (0, 1), (-1, -1), (-1, 1), (1, -1), (1, 1)]
-    for _ in range(max(0, int(args.sp_iters))):
-        accum = current.copy()
-        weight_sum = np.ones_like(current, dtype=np.float32)
-        for dy, dx in offsets:
-            src_y0 = max(0, -dy)
-            src_y1 = h - max(0, dy)
-            src_x0 = max(0, -dx)
-            src_x1 = w - max(0, dx)
-            dst_y0 = max(0, dy)
-            dst_y1 = h - max(0, -dy)
-            dst_x0 = max(0, dx)
-            dst_x1 = w - max(0, -dx)
-            src_feat = feats[src_y0:src_y1, src_x0:src_x1]
-            dst_feat = feats[dst_y0:dst_y1, dst_x0:dst_x1]
-            affinity = ((src_feat * dst_feat).sum(axis=-1) + 1.0) * 0.5
-            accum[dst_y0:dst_y1, dst_x0:dst_x1] += (
-                affinity * current[src_y0:src_y1, src_x0:src_x1]
-            )
-            weight_sum[dst_y0:dst_y1, dst_x0:dst_x1] += affinity
-        diffused = accum / weight_sum.clip(min=1e-6)
-        current = (1.0 - args.sp_alpha) * current + args.sp_alpha * diffused
-        current = np.maximum(current, args.sp_anchor * anchor)
-    return np.clip(normalize01(current), 0.0, 1.0).astype(np.float32)
-
-
 def feature_constrained_part_composition_prior(prior: np.ndarray, token_grid: np.ndarray, args):
     if token_grid is None:
         return prior
@@ -267,12 +230,10 @@ def feature_constrained_part_composition_prior(prior: np.ndarray, token_grid: np
 
 def enhance_prior(prior: np.ndarray, token_grid: np.ndarray, args):
     enhanced = normalize01(prior)
-    if args.prior_mode in {"pc", "pc_sp"}:
+    if args.prior_mode == "pc":
         enhanced = part_composition_prior(enhanced, args)
-    if args.prior_mode in {"fcpc", "fcpc_sp"}:
+    if args.prior_mode == "fcpc":
         enhanced = feature_constrained_part_composition_prior(enhanced, token_grid, args)
-    if args.prior_mode in {"sp", "pc_sp", "fcpc_sp"}:
-        enhanced = structural_propagation_prior(enhanced, token_grid, args)
     return enhanced.astype(np.float32)
 
 
