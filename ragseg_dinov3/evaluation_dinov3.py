@@ -62,6 +62,27 @@ def parse_args():
     parser.add_argument("--point_farthest_weight", type=float, default=0.5)
     parser.add_argument("--index_path", type=str, default="indexes/dinov3/sod_cod_dinov3_vits16.index")
     parser.add_argument("--score_path", type=str, default="indexes/dinov3/sod_cod_score_dinov3_vits16.index.npz")
+    parser.add_argument(
+        "--source_index_paths",
+        nargs="*",
+        default=None,
+        help="Optional per-source FAISS indexes. Enables separate source retrieval when provided.",
+    )
+    parser.add_argument(
+        "--source_score_paths",
+        nargs="*",
+        default=None,
+        help="Optional per-source score files. Must match --source_index_paths.",
+    )
+    parser.add_argument(
+        "--source_fusion",
+        type=str,
+        default="fixed",
+        choices=["fixed", "top1_conf", "agree_conf", "max_conf"],
+    )
+    parser.add_argument("--source_weights", type=str, default="")
+    parser.add_argument("--source_fusion_temp", type=float, default=0.05)
+    parser.add_argument("--source_agree_weight", type=float, default=0.2)
     parser.add_argument("--retrieval_topk", type=int, default=1)
     parser.add_argument(
         "--rerank_mode",
@@ -115,6 +136,34 @@ def load_index(repo_root: Path, index_path: str, score_path: str):
     scores = score_file["scores"].astype("float32")
     metadata = {key: score_file[key].tolist() for key in score_file.files if key != "scores"}
     return index, scores, metadata
+
+
+def load_retrieval_sources(repo_root: Path, args):
+    if args.source_index_paths or args.source_score_paths:
+        if not args.source_index_paths or not args.source_score_paths:
+            raise ValueError("--source_index_paths and --source_score_paths must be provided together")
+        if len(args.source_index_paths) != len(args.source_score_paths):
+            raise ValueError("--source_index_paths and --source_score_paths must have the same length")
+        index_paths = args.source_index_paths
+        score_paths = args.source_score_paths
+    else:
+        index_paths = [args.index_path]
+        score_paths = [args.score_path]
+
+    sources = []
+    for source_id, (index_path, score_path) in enumerate(zip(index_paths, score_paths)):
+        index, scores, metadata = load_index(repo_root, index_path, score_path)
+        sources.append(
+            {
+                "source_id": source_id,
+                "index_path": index_path,
+                "score_path": score_path,
+                "index": index,
+                "scores": scores,
+                "metadata": metadata,
+            }
+        )
+    return sources
 
 
 def load_sam2_predictor(repo_root: Path, device: torch.device):
@@ -171,6 +220,69 @@ def fuse_retrieval_scores(distances: np.ndarray, idxs: np.ndarray, scores: np.nd
         weights = weights / weights_sum
         return (retrieved_scores * weights).sum(axis=1)
     raise ValueError(f"Unsupported rerank mode: {args.rerank_mode}")
+
+
+def parse_source_weights(args, n_sources: int):
+    if not args.source_weights:
+        return np.full(n_sources, 1.0 / n_sources, dtype=np.float32)
+    values = np.array([float(item) for item in args.source_weights.split(",")], dtype=np.float32)
+    if values.shape[0] != n_sources:
+        raise ValueError(f"--source_weights has {values.shape[0]} values for {n_sources} sources")
+    total = float(values.sum())
+    if total <= 0:
+        raise ValueError("--source_weights must sum to a positive value")
+    return values / total
+
+
+def softmax_rows(logits: np.ndarray, temperature: float):
+    temperature = max(float(temperature), 1e-6)
+    scaled = logits.astype(np.float32) / temperature
+    scaled = scaled - scaled.max(axis=1, keepdims=True)
+    weights = np.exp(scaled)
+    return weights / weights.sum(axis=1, keepdims=True).clip(min=1e-6)
+
+
+def fuse_source_retrieval(source_results, args):
+    if len(source_results) == 1:
+        return source_results[0]["scores"]
+
+    source_scores = np.stack([item["scores"] for item in source_results], axis=1)
+    if args.source_fusion == "fixed":
+        weights = parse_source_weights(args, len(source_results))
+        return (source_scores * weights[None, :]).sum(axis=1)
+
+    top1_conf = np.stack([item["distances"][:, 0] for item in source_results], axis=1)
+    if args.source_fusion == "max_conf":
+        winners = np.argmax(top1_conf, axis=1)
+        return source_scores[np.arange(source_scores.shape[0]), winners]
+
+    if args.source_fusion == "top1_conf":
+        weights = softmax_rows(top1_conf, args.source_fusion_temp)
+        return (source_scores * weights).sum(axis=1)
+
+    if args.source_fusion == "agree_conf":
+        confidence = []
+        for item in source_results:
+            retrieved = item["retrieved_scores"]
+            score_std = retrieved.std(axis=1) if retrieved.shape[1] > 1 else np.zeros(retrieved.shape[0])
+            confidence.append(item["distances"][:, 0] - args.source_agree_weight * score_std)
+        weights = softmax_rows(np.stack(confidence, axis=1), args.source_fusion_temp)
+        return (source_scores * weights).sum(axis=1)
+
+    raise ValueError(f"Unsupported source_fusion: {args.source_fusion}")
+
+
+def retrieve_from_source(flat_tokens: np.ndarray, source, args):
+    distances, idxs = source["index"].search(flat_tokens, max(1, args.retrieval_topk))
+    valid = distances >= 0
+    retrieved_scores = np.zeros_like(distances, dtype=np.float32)
+    retrieved_scores[valid] = source["scores"][idxs[valid]]
+    return {
+        "distances": distances,
+        "idxs": idxs,
+        "retrieved_scores": retrieved_scores,
+        "scores": fuse_retrieval_scores(distances, idxs, source["scores"], args),
+    }
 
 
 def normalize01(x: np.ndarray):
@@ -345,7 +457,7 @@ def predict_from_prior(init_mask: np.ndarray, predictor, args):
     return select_sam_mask(masks, sam_scores, prior_binary, args)
 
 
-def rag_coarse_mask(img: Image.Image, extractor: DinoV3Extractor, index, scores, args):
+def rag_coarse_mask(img: Image.Image, extractor: DinoV3Extractor, retrieval_sources, args):
     inputs = extractor.preprocess_image(img, args.image_size)
     if extractor.device.type == "cuda":
         with torch.inference_mode(), torch.autocast(device_type="cuda", dtype=torch.float16):
@@ -356,8 +468,8 @@ def rag_coarse_mask(img: Image.Image, extractor: DinoV3Extractor, index, scores,
     token_tensor = out.patch_tokens.squeeze(0).detach().float().cpu()
     token_vec = token_tensor.numpy()
     flat_tokens = token_vec.reshape(-1, token_vec.shape[-1]).astype("float32")
-    distances, idxs = index.search(flat_tokens, max(1, args.retrieval_topk))
-    mask_vals = fuse_retrieval_scores(distances, idxs, scores, args)
+    source_results = [retrieve_from_source(flat_tokens, source, args) for source in retrieval_sources]
+    mask_vals = fuse_source_retrieval(source_results, args)
 
     grid_h, grid_w = out.grid_size
     expected = grid_h * grid_w
@@ -373,14 +485,14 @@ def rag_coarse_mask(img: Image.Image, extractor: DinoV3Extractor, index, scores,
     return mask_vals.reshape(grid_h, grid_w).astype(np.float32), token_grid, saliency_map
 
 
-def predict_mask(img_path: Path, predictor, extractor: DinoV3Extractor, index, scores, args, prior_dir: Path | None):
+def predict_mask(img_path: Path, predictor, extractor: DinoV3Extractor, retrieval_sources, args, prior_dir: Path | None):
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
     random.seed(args.seed)
 
     img = Image.open(img_path).convert("RGB")
     original_size = img.size
-    coarse_prior, token_grid, _ = rag_coarse_mask(img, extractor, index, scores, args)
+    coarse_prior, token_grid, _ = rag_coarse_mask(img, extractor, retrieval_sources, args)
     if prior_dir is not None:
         prior_dir.mkdir(parents=True, exist_ok=True)
         cv2.imwrite(str(prior_dir / f"{img_path.stem}.png"), (normalize01(coarse_prior) * 255).astype(np.uint8))
@@ -514,14 +626,36 @@ def main():
         log(f"Extractor: {extractor_signature}")
         log("Loading SAM2...")
         predictor = load_sam2_predictor(repo_root, device)
-        log("Loading FAISS index...")
-        index, scores, index_metadata = load_index(repo_root, args.index_path, args.score_path)
-        if index.d != extractor.feature_dim:
-            raise RuntimeError(
-                f"Index dim {index.d} does not match extractor dim {extractor.feature_dim}. "
-                "Rebuild the DINOv3 index with the same layers/fusion."
+        log("Loading FAISS index sources...")
+        retrieval_sources = load_retrieval_sources(repo_root, args)
+        index_metadata = []
+        for source in retrieval_sources:
+            index = source["index"]
+            scores = source["scores"]
+            if index.d != extractor.feature_dim:
+                raise RuntimeError(
+                    f"Index dim {index.d} does not match extractor dim {extractor.feature_dim} "
+                    f"for {source['index_path']}. Rebuild the DINOv3 index with the same layers/fusion."
+                )
+            if index.ntotal != scores.shape[0]:
+                raise RuntimeError(
+                    f"Score length {scores.shape[0]} does not match index size {index.ntotal} "
+                    f"for {source['score_path']}."
+                )
+            log(
+                "FAISS source loaded: "
+                f"{source['index_path']} ({index.ntotal} vectors, {scores.shape[0]} scores, dim={index.d})"
             )
-        log(f"FAISS index loaded: {index.ntotal} vectors, {scores.shape[0]} scores, dim={index.d}")
+            index_metadata.append(
+                {
+                    "source_id": source["source_id"],
+                    "index_path": source["index_path"],
+                    "score_path": source["score_path"],
+                    "ntotal": int(index.ntotal),
+                    "dim": int(index.d),
+                    "metadata": source["metadata"],
+                }
+            )
         log("Start inference...")
         start = time.time()
         for stem in tqdm(names, desc="infer", ncols=100):
@@ -533,8 +667,7 @@ def main():
                 img_path=img_path,
                 predictor=predictor,
                 extractor=extractor,
-                index=index,
-                scores=scores,
+                retrieval_sources=retrieval_sources,
                 args=args,
                 prior_dir=prior_dir,
             )

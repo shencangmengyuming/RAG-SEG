@@ -96,6 +96,28 @@ CHAMELEON source-balance check with the current strongest evaluation config:
 The balanced COD/DUTS index is slightly positive on CHAMELEON but does not close the
 remaining DINOv2 MAE gap by itself.
 
+Separate-source retrieval can be enabled during evaluation with
+`--source_index_paths` and `--source_score_paths`. Available fusion modes are:
+
+- `fixed`: fixed source weights from `--source_weights`
+- `top1_conf`: softmax over each source's top-1 retrieval similarity
+- `agree_conf`: top-1 similarity penalized by within-source top-k score variance
+- `max_conf`: hard route each token to the source with the highest top-1 similarity
+
+CHAMELEON separate-source retrieval check with COD 65536 and DUTS 65536:
+
+| Retrieval | S_alpha | meanE | F_w_beta | MAE |
+| --- | ---: | ---: | ---: | ---: |
+| COD single-source | 0.8838 | 0.9448 | 0.8520 | 0.02517 |
+| COD+DUTS merged index | 0.8847 | 0.9448 | 0.8530 | 0.02509 |
+| Separate fixed 0.5/0.5 | 0.8706 | 0.9353 | 0.8374 | 0.02779 |
+| Separate `top1_conf` | 0.8804 | 0.9396 | 0.8486 | 0.02525 |
+| Separate `agree_conf` | 0.8751 | 0.9368 | 0.8488 | 0.03623 |
+| Separate `max_conf` | 0.8844 | 0.9451 | 0.8528 | 0.02510 |
+
+The best separate-source strategy is `max_conf`, but it is still slightly worse
+than the simpler merged COD/DUTS index on CHAMELEON.
+
 ## Current strongest local configuration
 
 The strongest local DINOv3 run currently uses:
