@@ -1,0 +1,42 @@
+{
+  "task": "cod",
+  "description": "DINOv3-RAG-SEG COD task configuration. Default memory bank is COD-only K=65536.",
+  "common_args": {
+    "image_size": 896,
+    "l2_normalize_features": true,
+    "index_path": "indexes/dinov3/sod_cod_dinov3_vits16_k65536_centroid_l2.index",
+    "score_path": "indexes/dinov3/sod_cod_score_dinov3_vits16_k65536.index.npz",
+    "retrieval_topk": 5,
+    "rerank_mode": "mean",
+    "mask_thr": 0.27,
+    "pos_thr": 0.95,
+    "neg_thr": 0.05,
+    "point_sample_mode": "farthest_confidence",
+    "point_farthest_weight": 0.5
+  },
+  "result_path": "outputs/dinov3_cod_default",
+  "datasets": {
+    "COD10K": {
+      "data_path": "COD10K-v3",
+      "image_dir": "Test/Image",
+      "gt_dir": "Test/GT_Object",
+      "split": "Info/CAM_test.txt",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    },
+    "CAMO": {
+      "data_path": "CAMO-V.1.0-CVIU2019",
+      "image_dir": "Images/Test",
+      "gt_dir": "GT",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    },
+    "CHAMELEON": {
+      "data_path": "CHAMELEON_TestingDataset",
+      "image_dir": "image",
+      "gt_dir": "mask",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    }
+  }
+}

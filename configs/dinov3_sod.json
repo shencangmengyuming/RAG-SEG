@@ -1,0 +1,55 @@
+{
+  "task": "sod",
+  "description": "DINOv3-RAG-SEG SOD task configuration. Default memory bank is DUTS/SOD-only K=65536.",
+  "common_args": {
+    "image_size": 896,
+    "l2_normalize_features": true,
+    "index_path": "indexes/dinov3/sod_duts_dinov3_vits16_k65536_l2.index",
+    "score_path": "indexes/dinov3/sod_duts_score_dinov3_vits16_k65536_l2.index.npz",
+    "retrieval_topk": 5,
+    "rerank_mode": "mean",
+    "mask_thr": 0.27,
+    "pos_thr": 0.95,
+    "neg_thr": 0.05,
+    "point_sample_mode": "farthest_confidence",
+    "point_farthest_weight": 0.5
+  },
+  "result_path": "outputs/dinov3_sod_default",
+  "datasets": {
+    "PASCAL-S": {
+      "data_path": "/home/lsx/workplace/dino-sod/segdino-main/SOD/PASCAL-S",
+      "image_dir": "test/image",
+      "gt_dir": "test/mask",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    },
+    "ECSSD": {
+      "data_path": "/home/lsx/workplace/dino-sod/segdino-main/SOD/ECSSD",
+      "image_dir": "test/image",
+      "gt_dir": "test/mask",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    },
+    "HKU-IS": {
+      "data_path": "/home/lsx/workplace/dino-sod/segdino-main/SOD/HKU-IS",
+      "image_dir": "test/image",
+      "gt_dir": "test/mask",
+      "image_ext": ".png",
+      "gt_ext": ".png"
+    },
+    "DUTS-TE": {
+      "data_path": "/home/lsx/workplace/dino-sod/segdino-main/SOD/DUTS",
+      "image_dir": "test/image",
+      "gt_dir": "test/mask",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    },
+    "DUT-OMRON": {
+      "data_path": "/home/lsx/workplace/dino-sod/segdino-main/SOD/DUT-OMRON",
+      "image_dir": "test/image",
+      "gt_dir": "test/mask",
+      "image_ext": ".jpg",
+      "gt_ext": ".png"
+    }
+  }
+}

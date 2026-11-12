@@ -58,6 +58,7 @@ def parse_args():
     parser.add_argument("--layer_weights", type=str, default="")
     parser.add_argument("--zero_based_layers", action="store_true")
     parser.add_argument("--l2_normalize_features", action="store_true")
+    parser.add_argument("--debias_svd_components", type=int, default=0)
     parser.add_argument("--cache_dir", type=str, default="outputs/dinov3_index")
     parser.add_argument(
         "--reuse_cache",
@@ -142,6 +143,8 @@ def extract_feature_cache(args, repo_root: Path, pairs, extractor: DinoV3Extract
     cache_dir = resolve(repo_root, args.cache_dir)
     cache_dir.mkdir(parents=True, exist_ok=True)
     suffix = f"{args.backbone}_{args.fusion}_{args.image_size}_{len(pairs)}"
+    if args.debias_svd_components:
+        suffix += f"_debias{args.debias_svd_components}"
     feature_path = cache_dir / f"features_{suffix}.npy"
     score_path = cache_dir / f"scores_{suffix}.npy"
 
@@ -268,6 +271,7 @@ def main():
         layer_weights=args.layer_weights,
         zero_based_layers=args.zero_based_layers,
         l2_normalize=args.l2_normalize_features,
+        debias_svd_components=args.debias_svd_components,
         device=device,
     )
 
@@ -326,6 +330,7 @@ def main():
         fusion=np.array([args.fusion]),
         layers=np.array([args.layers]),
         l2_normalize=np.array([int(args.l2_normalize_features)], dtype=np.int64),
+        debias_svd_components=np.array([args.debias_svd_components], dtype=np.int64),
         niter=np.array([args.niter], dtype=np.int64),
         nredo=np.array([args.nredo], dtype=np.int64),
         min_points_per_centroid=np.array([args.min_points_per_centroid], dtype=np.int64),

@@ -60,6 +60,7 @@ class DinoV3Extractor:
         layer_weights: str = "",
         zero_based_layers: bool = False,
         l2_normalize: bool = False,
+        debias_svd_components: int = 0,
         device: torch.device | str = "cpu",
     ):
         self.repo_root = Path(repo_root)
@@ -69,6 +70,7 @@ class DinoV3Extractor:
         self.layer_ids = parse_layers(layers, zero_based_layers)
         self.fusion = fusion
         self.l2_normalize = l2_normalize
+        self.debias_svd_components = int(debias_svd_components)
         self.device = torch.device(device)
 
         if not self.dinov3_repo.is_dir():
@@ -79,12 +81,21 @@ class DinoV3Extractor:
             raise ValueError(f"Unsupported fusion: {self.fusion}")
         if self.fusion != "last" and not self.layer_ids:
             raise ValueError("--layers is required when fusion is not 'last'.")
+        if self.debias_svd_components and self.fusion == "concat":
+            raise ValueError("Positional debiasing is not supported with concat fusion.")
 
         self.layer_weights = parse_layer_weights(layer_weights, len(self.layer_ids)) if self.layer_ids else []
         self.model = self._load_model().to(self.device).eval()
         self.patch_size = int(getattr(self.model, "patch_size", 16))
         self.base_dim = int(getattr(self.model, "embed_dim", 384))
         self.feature_dim = self.base_dim * len(self.layer_ids) if self.fusion == "concat" else self.base_dim
+        if self.debias_svd_components < 0:
+            raise ValueError("--debias_svd_components must be non-negative")
+        if self.debias_svd_components > self.feature_dim:
+            raise ValueError(
+                f"--debias_svd_components={self.debias_svd_components} exceeds feature_dim={self.feature_dim}"
+            )
+        self._positional_basis_cache: dict[tuple[int, int], torch.Tensor] = {}
 
     def _load_model(self):
         repo_path = str(self.dinov3_repo)
@@ -112,14 +123,44 @@ class DinoV3Extractor:
         batch = [self.preprocess_image(Image.open(path), image_size).squeeze(0).cpu() for path in paths]
         return torch.stack(batch, dim=0).to(self.device)
 
+    def _extract_last_patch_tokens(self, inputs: torch.Tensor):
+        out = self.model.forward_features(inputs)
+        return out["x_norm_patchtokens"], out.get("x_norm_clstoken")
+
+    def _positional_basis(self, height: int, width: int, dtype: torch.dtype):
+        key = (height, width)
+        if key in self._positional_basis_cache:
+            return self._positional_basis_cache[key].to(device=self.device, dtype=dtype)
+
+        raw = torch.zeros(1, 3, height, width, device=self.device, dtype=torch.float32)
+        mean = torch.tensor(IMAGENET_MEAN, device=self.device, dtype=torch.float32)[None, :, None, None]
+        std = torch.tensor(IMAGENET_STD, device=self.device, dtype=torch.float32)[None, :, None, None]
+        noise_input = (raw - mean) / std
+        with torch.inference_mode():
+            patch_tokens, _ = self._extract_last_patch_tokens(noise_input)
+        patch_tokens = F.normalize(patch_tokens.float(), dim=-1, p=2)
+        matrix = patch_tokens[0].T
+        matrix = matrix - matrix.mean(dim=1, keepdim=True)
+        basis, _, _ = torch.linalg.svd(matrix, full_matrices=False)
+        basis = basis[:, : self.debias_svd_components].contiguous()
+        self._positional_basis_cache[key] = basis.detach().cpu()
+        return basis.to(device=self.device, dtype=dtype)
+
+    def _debias_patch_tokens(self, patch_tokens: torch.Tensor, height: int, width: int):
+        if self.debias_svd_components <= 0:
+            return patch_tokens
+        tokens = F.normalize(patch_tokens.float(), dim=-1, p=2)
+        basis = self._positional_basis(height, width, tokens.dtype)
+        projection = tokens @ basis
+        tokens = tokens - projection @ basis.T
+        return F.normalize(tokens, dim=-1, p=2)
+
     def extract(self, inputs: torch.Tensor) -> DinoV3FeatureOutput:
         _, _, height, width = inputs.shape
         grid_size = (height // self.patch_size, width // self.patch_size)
         with torch.inference_mode():
             if self.fusion == "last":
-                out = self.model.forward_features(inputs)
-                patch_tokens = out["x_norm_patchtokens"]
-                cls_token = out.get("x_norm_clstoken")
+                patch_tokens, cls_token = self._extract_last_patch_tokens(inputs)
             else:
                 feats = self.model.get_intermediate_layers(
                     inputs,
@@ -143,6 +184,7 @@ class DinoV3Extractor:
                     patch_tokens = torch.stack(patch_list, dim=0).mean(dim=0)
                     cls_token = torch.stack(cls_list, dim=0).mean(dim=0)
 
+        patch_tokens = self._debias_patch_tokens(patch_tokens, height, width)
         if self.l2_normalize:
             patch_tokens = F.normalize(patch_tokens.float(), dim=-1, p=2)
             if cls_token is not None:
@@ -159,5 +201,5 @@ class DinoV3Extractor:
             "fusion": self.fusion,
             "layer_weights": self.layer_weights,
             "l2_normalize": self.l2_normalize,
+            "debias_svd_components": self.debias_svd_components,
         }
-

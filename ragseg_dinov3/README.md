@@ -47,6 +47,59 @@ python -m ragseg_dinov3.evaluation_dinov3 \
   --score_path indexes/dinov3/sod_cod_score_dinov3_vits16.index.npz
 ```
 
+## Task-specific COD/SOD configs
+
+The DINOv3 project is split into two task configurations so COD and SOD do not
+silently share the same retrieval memory bank or output directory.
+
+| Task | Config | Default memory bank | Output root |
+| --- | --- | --- | --- |
+| COD | `configs/dinov3_cod.json` | COD-only `K=65536` | `outputs/dinov3_cod_default` |
+| SOD | `configs/dinov3_sod.json` | DUTS/SOD-only `K=65536` | `outputs/dinov3_sod_default` |
+
+Run a single COD dataset:
+
+```bash
+python -m ragseg_dinov3.run_task_config \
+  --config configs/dinov3_cod.json \
+  --dataset CHAMELEON \
+  --force
+```
+
+Run all configured COD datasets:
+
+```bash
+scripts/eval_dinov3_cod.sh all --force
+```
+
+Run one SOD dataset:
+
+```bash
+python -m ragseg_dinov3.run_task_config \
+  --config configs/dinov3_sod.json \
+  --dataset PASCAL-S \
+  --force
+```
+
+Run all configured SOD datasets:
+
+```bash
+scripts/eval_dinov3_sod.sh all --force
+```
+
+For quick command checks without launching inference, add `--dry_run`:
+
+```bash
+python -m ragseg_dinov3.run_task_config \
+  --config configs/dinov3_sod.json \
+  --dataset PASCAL-S \
+  --dry_run
+```
+
+The SOD config currently registers `PASCAL-S`, `ECSSD`, `HKU-IS`, `DUTS-TE`,
+and `DUT-OMRON`. The COD config registers `COD10K`, `CAMO`, and `CHAMELEON`.
+Use `--dataset A,B` for a comma-separated subset.
+
 ## SegDINO-style multi-layer ablation
 
 Layer numbers are 1-based by default, so `3,6,9,12` maps to DINOv3-S blocks
